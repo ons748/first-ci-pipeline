@@ -27,9 +27,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/my-first-pipeline
+          tags: |
+              type=sha,prefix={{branch}}-,format=short
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/my-first-pipeline:main-${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
