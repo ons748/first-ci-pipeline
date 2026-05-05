@@ -1,0 +1,23 @@
+name: Deploy Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy'
+        required: true
+      branch:
+        description: 'Branch to deploy from'
+        required: true
+      namespace:
+        description: 'Kubernetes namespace to deploy to'
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print inputs
+        run: |
+          echo "Tag: ${{ github.event.inputs.tag }}"
+          echo "Branch: ${{ github.event.inputs.branch }}"
+          echo "Namespace: ${{ github.event.inputs.namespace }}"
