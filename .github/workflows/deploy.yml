@@ -1,0 +1,32 @@
+name: Deploy Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy'
+        required: true
+      branch:
+        description: 'Branch to deploy from'
+        required: true
+      namespace:
+        description: 'Kubernetes namespace to deploy to'
+        required: true
+jobs:
+  schema-manager: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run schema manager
+      run:  echo "Run schema manager"
+  importer:
+    needs: schema-manager
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run importer
+      run: echo 'Run importer'
+  deploy:
+    needs: importer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Kubernetes
+        run:  echo "Deploying tag ${{ github.event.inputs.tag }} from branch ${{ github.event.inputs.branch }} to namespace ${{ github.event.inputs.namespace }}"          
